@@ -1,12 +1,24 @@
 import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+
+//components
 import ProductsList from './components/ProductsList';
-import Reviews from './components/Reviews';
+import ProductDetailPage from './components/ProductDetailPage';
 
 function App() {
   return (
     <div className="App">
-      <ProductsList />
-      <Reviews />
+      <Switch>
+        <Route
+          path="/products/:id"
+          render={(props) => {
+            return <ProductDetailPage {...props} />;
+          }}
+        ></Route>
+        <Route path="/">
+          <ProductsList />
+        </Route>
+      </Switch>
     </div>
   );
 }
