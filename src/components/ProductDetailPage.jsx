@@ -13,7 +13,7 @@ export default function ProductDetailPage(props) {
       .then((data) => {
         setProduct(data);
       });
-  }, []);
+  }, [productId]);
 
   function renderProduct() {
     if (product === '') {

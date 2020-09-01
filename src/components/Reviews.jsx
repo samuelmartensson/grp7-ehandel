@@ -2,17 +2,19 @@ import React, { useState, useEffect } from 'react';
 
 export default function Reviews({ id }) {
   const [data, setData] = useState({});
-  function fetchData() {
-    fetch(`https://mock-data-api.firebaseio.com/e-commerce/reviews/${id}.json`)
-      .then((res) => res.json())
-      .then((items) => {
-        setData(items);
-        console.log(items);
-      });
-  }
+
   useEffect(() => {
+    function fetchData() {
+      fetch(
+        `https://mock-data-api.firebaseio.com/e-commerce/reviews/${id}.json`
+      )
+        .then((res) => res.json())
+        .then((items) => {
+          setData(items);
+        });
+    }
     fetchData();
-  }, []);
+  }, [id]);
   return (
     <div className="reviews">
       <h1 className="reviews__header">Reviews</h1>
