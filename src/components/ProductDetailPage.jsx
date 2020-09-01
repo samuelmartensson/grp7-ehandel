@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import Reviews from './Reviews';
 
 export default function ProductDetailPage(props) {
   const [product, setProduct] = useState('');
@@ -30,6 +31,7 @@ export default function ProductDetailPage(props) {
               <img src={product.images[0].src.small} alt="" />
             </li>
           </ol>
+          <Reviews id={productId} />
         </div>
       );
     }
