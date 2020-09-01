@@ -11,9 +11,16 @@ import LayoutHeader from './components/LayoutHeader';
 function App() {
   const [productIds, setProductIds] = useState([]);
 
+  function handleAddToCart(productId) {
+    setProductIds((prevState) => [...prevState, productId]);
+    localStorage.setItem('cart', JSON.stringify([...productIds, productId]));
+  }
+
   return (
     <div className="App">
-      <CartContext.Provider value={{ productIds, setProductIds }}>
+      <CartContext.Provider
+        value={{ productIds, setProductIds, handleAddToCart }}
+      >
         <Switch>
           <Route
             path="/products/:id"

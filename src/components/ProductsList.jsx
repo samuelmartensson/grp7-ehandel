@@ -5,7 +5,7 @@ import { CartContext } from '../context/CartContext';
 
 export default function ProductsList() {
   const [data, setData] = useState({});
-  const { setProductIds } = useContext(CartContext);
+  const { handleAddToCart } = useContext(CartContext);
 
   function fetchData() {
     fetch('https://mock-data-api.firebaseio.com/e-commerce/products.json')
@@ -28,11 +28,7 @@ export default function ProductsList() {
             <div key={key}>
               {payload.name}
               <Link to={`/products/${payload.id}`}>Go to product detail</Link>
-              <button
-                onClick={() =>
-                  setProductIds((prevState) => [...prevState, payload.id])
-                }
-              >
+              <button onClick={() => handleAddToCart(payload.id)}>
                 Add to cart
               </button>
             </div>

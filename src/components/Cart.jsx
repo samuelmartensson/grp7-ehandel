@@ -1,16 +1,21 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { useState } from 'react';
-import { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 
 export default function Cart() {
   const [products, setProducts] = useState([]);
   const { productIds, setProductIds } = useContext(CartContext);
   function mapIdsToUrl() {
-    let list = productIds.map((id) => {
-      return `https://mock-data-api.firebaseio.com/e-commerce/products/${id}.json`;
-    });
+    let list;
+
+    if (localStorage.getItem('cart')) {
+      list = JSON.parse(localStorage.getItem('cart')).map((id) => {
+        return `https://mock-data-api.firebaseio.com/e-commerce/products/${id}.json`;
+      });
+    } else {
+      list = productIds.map((id) => {
+        return `https://mock-data-api.firebaseio.com/e-commerce/products/${id}.json`;
+      });
+    }
     return list;
   }
 
@@ -34,6 +39,10 @@ export default function Cart() {
     setProducts((prevState) =>
       prevState.filter((item) => item.id !== productId)
     );
+    let store = JSON.parse(localStorage.getItem('cart')).filter(
+      (item) => item !== productId
+    );
+    localStorage.setItem('cart', JSON.stringify(store));
   }
 
   useEffect(() => {
