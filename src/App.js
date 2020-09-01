@@ -1,9 +1,9 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 
 //components
-import ProductsList from "./components/ProductsList";
-import ProductDetailPage from "./components/ProductsList";
+import ProductsList from './components/ProductsList';
+import ProductDetailPage from './components/ProductDetailPage';
 
 function App() {
   return (

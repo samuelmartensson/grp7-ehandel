@@ -1,47 +1,39 @@
-import React, { useContext, useEffect } from "react";
-import { DataContext } from "../contexts/DataContext";
-import { useState } from "react";
+import React, { useEffect } from 'react';
+import { useState } from 'react';
 
-export default function ProductDetailPage() {
-  const data = useContext(DataContext);
-  const [product, setProduct] = useState("");
-
+export default function ProductDetailPage(props) {
+  const [product, setProduct] = useState('');
+  const productId = props.match.params.id;
   useEffect(() => {
-    fetch("https://mock-data-api.firebaseio.com/e-commerce/products/16065.json")
+    fetch(
+      `https://mock-data-api.firebaseio.com/e-commerce/products/${productId}.json`
+    )
       .then((res) => res.json())
       .then((data) => {
-        setProduct(data)
-        console.log(data.images[0].src.medium);
-      })
+        setProduct(data);
+      });
   }, []);
 
   function renderProduct() {
-    if (product == ""){
-      return <div>loading</div>
-    }
-    else { 
+    if (product === '') {
+      return <div>loading</div>;
+    } else {
       return (
-      <div>
-        <ol>
-          <li>{product.name}</li>
-          <li>{product.description}</li>
-          <li>{product.price}</li>
-          <li>{product.rating}</li>
-          <li>{product.stock}</li>
-          <li><img src={product.images[0].src.small}/></li>
-      
-        </ol>
-      </div>
-      )
+        <div>
+          <ol>
+            <li>{product.name}</li>
+            <li>{product.description}</li>
+            <li>{product.price}</li>
+            <li>{product.rating}</li>
+            <li>{product.stock}</li>
+            <li>
+              <img src={product.images[0].src.small} alt="" />
+            </li>
+          </ol>
+        </div>
+      );
     }
   }
-  
-  
 
-  return (
-    <div>{renderProduct()}</div>
-
-  )
-   
+  return <div>{renderProduct()}</div>;
 }
-  
