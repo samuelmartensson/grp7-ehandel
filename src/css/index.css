@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+.reviews {
+  font-family: 'Roboto', sans-serif;
+}
+
+.reviews__item-wrap {
+  border-bottom: 1px solid #bbbbbb;
+  padding: 0.75rem;
+  margin-bottom: 0.25rem;
+  max-width: 500px;
+}
+
+.reviews__item-wrap:first-of-type {
+  border-top: 1px solid #bbbbbb;
+}
+
+.reviews__title {
+  margin: 0;
+  margin-left: 1rem;
+}
+
+.reviews__row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 8px;
+}
+
+.reviews__author {
+  margin-right: 5px;
+}
+
+.reviews__author span {
+  color: #697ef3;
+}
+
+.reviews__date {
+  color: rgba(0, 0, 0, 0.562);
+}
+/*# sourceMappingURL=index.css.map */

@@ -1,0 +1,29 @@
+.reviews {
+  font-family: 'Roboto', sans-serif;
+  &__item-wrap {
+    border-bottom: 1px solid rgb(187, 187, 187);
+    padding: 0.75rem;
+    margin-bottom: 0.25rem;
+    max-width: 500px;
+    &:first-of-type {
+      border-top: 1px solid rgb(187, 187, 187);
+    }
+  }
+  &__title {
+    margin: 0;
+    margin-left: 1rem;
+  }
+  &__row {
+    display: flex;
+    margin-top: 8px;
+  }
+  &__author {
+    margin-right: 5px;
+    span {
+      color: rgb(105, 126, 243);
+    }
+  }
+  &__date {
+    color: rgba(0, 0, 0, 0.562);
+  }
+}
