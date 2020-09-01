@@ -4,11 +4,12 @@ import { useState } from 'react';
 import Reviews from './Reviews';
 
 export default function ProductDetailPage() {
-  const data = useContext(DataContext);
   const [product, setProduct] = useState('');
 
   useEffect(() => {
-    fetch('https://mock-data-api.firebaseio.com/e-commerce/products/16065.json')
+    fetch(
+      `https://mock-data-api.firebaseio.com/e-commerce/products/${productId}.json`
+    )
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
@@ -32,7 +33,7 @@ export default function ProductDetailPage() {
               <img src={product.images[0].src.small} />
             </li>
           </ol>
-          <Reviews />
+          <Reviews id={productId} />
         </div>
       );
     }

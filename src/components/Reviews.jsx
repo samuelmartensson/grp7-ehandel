@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Reviews() {
+export default function Reviews({ id }) {
   const [data, setData] = useState({});
   function fetchData() {
-    fetch('https://mock-data-api.firebaseio.com/e-commerce/reviews/18272.json')
+    fetch(`https://mock-data-api.firebaseio.com/e-commerce/reviews/${id}.json`)
       .then((res) => res.json())
       .then((items) => {
         setData(items);
