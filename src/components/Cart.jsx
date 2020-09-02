@@ -1,19 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import Loader from './Loader';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import CartView from './CartView';
 import { CartContext } from '../context/CartContext';
-import { useContext } from 'react';
 
 export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
-
-  const { productIds } = useContext(CartContext);
+  const [total, setTotal] = useState(0);
+  const [coupons, setCoupons] = useState([]);
+  const [notDiscounted, setNotDiscounted] = useState(true);
+  const orderName = useRef();
+  const couponCode = useRef();
+  const { setProductIds } = useContext(CartContext);
 
   function mapIdsToUrl() {
+    //Converts array of ids and quantity to array with fetch urls and quantity
     let list;
     if (localStorage.getItem('cart')) {
       list = JSON.parse(localStorage.getItem('cart')).map((product) => {
-        return `https://mock-data-api.firebaseio.com/e-commerce/products/${product.id}.json`;
+        return {
+          url: `https://mock-data-api.firebaseio.com/e-commerce/products/${product.id}.json`,
+          quantity: product.quantity,
+        };
       });
     }
     return list;
@@ -21,16 +28,19 @@ export default function Cart() {
 
   function fetchAllProducts() {
     let urls = mapIdsToUrl();
-
     if (urls.length === 0) {
       setIsLoading(false);
     } else {
+      // Fetches all products from database by using product id in correct endpoint (see mapIdsToUrl function)
       Promise.all(
         urls.map((url) =>
-          fetch(url)
+          fetch(url.url)
             .then((res) => res.json())
             .then((data) => {
-              setProducts((prevState) => [...prevState, data]);
+              setProducts((prevState) => [
+                ...prevState,
+                { item: data, quantity: url.quantity },
+              ]);
               setIsLoading(false);
             })
         )
@@ -38,55 +48,87 @@ export default function Cart() {
     }
   }
   function handleRemove(productId) {
-    //Removes item from cart and LS
-    setProducts((prevState) =>
-      prevState.filter((item) => item.id !== productId)
+    //Removes item from state by filtering current depending array
+    setProductIds((prevState) =>
+      prevState.filter((product) => product.id !== productId)
     );
+    setProducts((prevState) =>
+      prevState.filter((product) => product.item.id !== productId)
+    );
+    //Removes item from local storage
     let store = JSON.parse(localStorage.getItem('cart')).filter(
       (item) => item.id !== productId
     );
     localStorage.setItem('cart', JSON.stringify(store));
   }
 
+  function setTotalPrice() {
+    // When products are fetched from endpoint they are reduced to the total price
+    let totalPrice = products.reduce(
+      (acc, curr) => acc + curr.item.price * curr.quantity,
+      0
+    );
+    setTotal(totalPrice);
+  }
+  function fetchCouponCodes() {
+    fetch(`https://mock-data-api.firebaseio.com/e-commerce/couponCodes.json`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCoupons(data);
+      });
+  }
+  function addCoupon() {
+    if (
+      products.length > 0 &&
+      Object.entries(coupons).find(
+        (item) => item[0] === couponCode.current.value && notDiscounted
+      )
+    ) {
+      const discount = coupons[couponCode.current.value].discount;
+      setTotal((prevState) => Math.floor(prevState * discount));
+      setNotDiscounted(false);
+    }
+  }
+  function renderCouponMessage() {
+    if (products.length === 0) {
+      return 'Cart is empty';
+    }
+  }
+  function handlePlaceOrder() {
+    const url = `https://mock-data-api.firebaseio.com/e-commerce/orders/group-7.json`;
+    const data = {
+      name: orderName.current.value,
+      ordered_products: products,
+      total: total,
+    };
+    fetch(url, { method: 'POST', body: JSON.stringify(data) })
+      .then((res) => res.json())
+      .then((data) => {
+        orderName.current.value = '';
+      });
+  }
+
   useEffect(() => {
     fetchAllProducts();
+    fetchCouponCodes();
   }, []);
 
+  useEffect(() => {
+    // Must run this with products in dependency array since products are loaded asynchronously
+    setTotalPrice();
+  }, [products]);
+
   return (
-    <div className="cart">
-      <h2 className="cart__subheader">Your cart</h2>
-      <div className="cart__item-container">
-        {isLoading && <Loader />}
-        {products
-          .sort((a, b) => b.price - a.price)
-          .map((product, i) => {
-            return (
-              <div className="cart__item" key={i}>
-                <div className="cart__img-wrap">
-                  <img src={product.images[0].src.small} alt="" />
-                </div>
-                <div className="cart__info-wrap">
-                  <div className="cart__name">{product.name}</div>
-                  <div className="cart__description">{product.description}</div>
-                </div>
-                <div className="cart__price">{product.price} SEK</div>
-                <div className="cart__price">
-                  {
-                    JSON.parse(localStorage.getItem('cart')).filter(
-                      (item) => item.id === product.id
-                    )[0].quantity
-                  }
-                </div>
-                <button
-                  onClick={() => handleRemove(product.id)}
-                  className="cart__remove"
-                >
-                  Remove
-                </button>
-              </div>
-            );
-          })}
-      </div>
-    </div>
+    <CartView
+      isLoading={isLoading}
+      handlePlaceOrder={handlePlaceOrder}
+      handleRemove={handleRemove}
+      products={products}
+      orderName={orderName}
+      couponCode={couponCode}
+      addCoupon={addCoupon}
+      total={total}
+      notDiscounted={notDiscounted}
+    />
   );
 }

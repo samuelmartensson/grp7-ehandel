@@ -40,7 +40,7 @@ function App() {
 
   return (
     <div className="App">
-      <CartContext.Provider value={{ handleAddToCart, productIds }}>
+      <CartContext.Provider value={{ handleAddToCart, setProductIds }}>
         <Switch>
           <Route
             path="/products/:id"
