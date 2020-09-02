@@ -1,14 +1,14 @@
-import React from 'react';
-import { useEffect, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { CartContext } from '../context/CartContext';
+import React from "react";
+import { useEffect, useState, useContext } from "react";
+import { Link } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 
 export default function ProductsList() {
   const [data, setData] = useState({});
   const { handleAddToCart } = useContext(CartContext);
 
   function fetchData() {
-    fetch('https://mock-data-api.firebaseio.com/e-commerce/products.json')
+    fetch("https://mock-data-api.firebaseio.com/e-commerce/products.json")
       .then((res) => res.json())
       .then((items) => {
         setData(items);
@@ -18,19 +18,41 @@ export default function ProductsList() {
     fetchData();
   }, []);
   return (
-    <div>
+    <div className="product">
       {data &&
         Object.entries(data).map((item) => {
           const key = item[0];
           const payload = item[1];
 
           return (
-            <div key={key}>
-              {payload.name}
-              <Link to={`/products/${payload.id}`}>Go to product detail</Link>
-              <button onClick={() => handleAddToCart(payload.id)}>
-                Add to cart
-              </button>
+            <div className="product__card" key={key}>
+              <Link className="product__link" to={`/products/${payload.id}`}>
+                <div className="product__card-wrapper">
+                  <div className="product__img-wrapper">
+                    <img
+                      className="product__img"
+                      src={payload.images[0].src.small}
+                      alt={payload.images[0].alt}
+                    />
+                  </div>
+                  <div className="product__info">
+                    <h3 className="product__info-title"> {payload.name}</h3>
+                    <p className="product__info-text">{`${payload.description.slice(
+                      0,
+                      20
+                    )} ...`}</p>
+                    <span className="product__info-price">{`${payload.price} kr `}</span>
+                  </div>
+                </div>
+              </Link>
+              <div className="product__cartbutton-wrapper">
+                <button
+                  className="product__cartbutton"
+                  onClick={() => handleAddToCart(payload.id)}
+                >
+                  BUY
+                </button>
+              </div>
             </div>
           );
         })}
