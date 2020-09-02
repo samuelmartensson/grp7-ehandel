@@ -5,10 +5,15 @@ import { CartContext } from '../context/CartContext';
 export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [coupons, setCoupons] = useState([]);
+  const [notDiscounted, setNotDiscounted] = useState(true);
   const orderName = useRef();
   const couponCode = useRef();
   const { setProductIds } = useContext(CartContext);
+
   function mapIdsToUrl() {
+    //Converts array of ids and quantity to array with fetch urls and quantity
     let list;
     if (localStorage.getItem('cart')) {
       list = JSON.parse(localStorage.getItem('cart')).map((product) => {
@@ -23,10 +28,10 @@ export default function Cart() {
 
   function fetchAllProducts() {
     let urls = mapIdsToUrl();
-
     if (urls.length === 0) {
       setIsLoading(false);
     } else {
+      // Fetches all products from database by using product id in correct endpoint (see mapIdsToUrl function)
       Promise.all(
         urls.map((url) =>
           fetch(url.url)
@@ -43,55 +48,58 @@ export default function Cart() {
     }
   }
   function handleRemove(productId) {
-    //Removes item from state and LS
+    //Removes item from state by filtering current depending array
     setProductIds((prevState) =>
       prevState.filter((product) => product.id !== productId)
     );
     setProducts((prevState) =>
       prevState.filter((product) => product.item.id !== productId)
     );
+    //Removes item from local storage
     let store = JSON.parse(localStorage.getItem('cart')).filter(
       (item) => item.id !== productId
     );
     localStorage.setItem('cart', JSON.stringify(store));
   }
-  function displayTotal() {
-    if (products.length > 0) {
-      let total = products.reduce(
-        (acc, curr) => acc + curr.item.price * curr.quantity,
-        0
-      );
 
-      // if (couponCode.current.value) {
-      //   console.log(couponCode.current.value);
-      //   return total * checkCoupon(couponCode.current.value);
-      // }
-      return total;
-    } else {
-      return 0;
+  function setTotalPrice() {
+    // When products are fetched from endpoint they are reduced to the total price
+    let totalPrice = products.reduce(
+      (acc, curr) => acc + curr.item.price * curr.quantity,
+      0
+    );
+    setTotal(totalPrice);
+  }
+  function fetchCouponCodes() {
+    fetch(`https://mock-data-api.firebaseio.com/e-commerce/couponCodes.json`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCoupons(data);
+      });
+  }
+  function addCoupon() {
+    if (
+      products.length > 0 &&
+      Object.entries(coupons).find(
+        (item) => item[0] === couponCode.current.value && notDiscounted
+      )
+    ) {
+      const discount = coupons[couponCode.current.value].discount;
+      setTotal((prevState) => Math.floor(prevState * discount));
+      setNotDiscounted(false);
     }
   }
-  function checkCoupon(code) {
-    console.log(code);
-    // fetch(
-    //   `https://mock-data-api.firebaseio.com/e-commerce/couponCodes/${code}.json`
-    // )
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     if (data.valid) {
-    //       console.log('valid');
-    //       return data.discount;
-    //     } else {
-    //       return 1;
-    //     }
-    //   });
+  function renderCouponMessage() {
+    if (products.length === 0) {
+      return 'Cart is empty';
+    }
   }
   function handlePlaceOrder() {
     const url = `https://mock-data-api.firebaseio.com/e-commerce/orders/group-7.json`;
     const data = {
       name: orderName.current.value,
       ordered_products: products,
-      total: displayTotal(),
+      total: total,
     };
     fetch(url, { method: 'POST', body: JSON.stringify(data) })
       .then((res) => res.json())
@@ -102,18 +110,25 @@ export default function Cart() {
 
   useEffect(() => {
     fetchAllProducts();
+    fetchCouponCodes();
   }, []);
+
+  useEffect(() => {
+    // Must run this with products in dependency array since products are loaded asynchronously
+    setTotalPrice();
+  }, [products]);
 
   return (
     <CartView
       isLoading={isLoading}
-      displayTotal={displayTotal}
       handlePlaceOrder={handlePlaceOrder}
       handleRemove={handleRemove}
       products={products}
       orderName={orderName}
       couponCode={couponCode}
-      checkCoupon={checkCoupon}
+      addCoupon={addCoupon}
+      total={total}
+      notDiscounted={notDiscounted}
     />
   );
 }

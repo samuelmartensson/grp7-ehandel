@@ -6,16 +6,26 @@ export default function CartView({
   products,
   handleRemove,
   handlePlaceOrder,
-  displayTotal,
   orderName,
   couponCode,
-  checkCoupon,
+  addCoupon,
+  total,
+  notDiscounted,
 }) {
   return (
     <div className="cart">
       <h2 className="cart__subheader">Your cart</h2>
       <div className="cart__item-container">
         {isLoading && <Loader />}
+        {products.length === 0 && !isLoading ? (
+          <span className="cart__empty">Your cart seems to be empty 😱</span>
+        ) : (
+          <div className="cart__item cart__header">
+            <span className="cart__header-item">Item</span>
+            <span className="cart__header-price">Price</span>
+            <span className="cart__header-quantity">Quantity</span>
+          </div>
+        )}
         {products
           .sort((a, b) => b.price - a.price)
           .map((product, i) => {
@@ -41,19 +51,27 @@ export default function CartView({
             );
           })}
       </div>
-      <div>
-        <div>
+      <div className="cart__input-wrapper">
+        <div className="cart__input-container">
           <label htmlFor="name">Name</label>
           <input name="name" ref={orderName} type="text" />
-        </div>
-        <div>
           <label htmlFor="coupon">Coupon code</label>
-          <input name="coupon" ref={couponCode} type="text" />
-          <button onClick={checkCoupon}>Check</button>
+          {notDiscounted ? (
+            <>
+              <div className="cart__coupon">
+                <input name="coupon" ref={couponCode} type="text" />
+                <button onClick={addCoupon}>Check</button>
+              </div>
+            </>
+          ) : (
+            <span>{couponCode.current.value} discount applied!</span>
+          )}
+          <div className="cart__total">Total: {total} SEK</div>
+          <button className="cart__cta" onClick={handlePlaceOrder}>
+            Place order
+          </button>
         </div>
       </div>
-      <div>Total: {displayTotal()} SEK</div>
-      <button onClick={handlePlaceOrder}>Place order</button>
     </div>
   );
 }
