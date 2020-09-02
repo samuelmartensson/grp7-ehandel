@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import Reviews from "./Reviews";
-import AddToCartBtn from "./AddToCartBtn";
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import Reviews from './Reviews';
+import AddToCartBtn from './AddToCartBtn';
 
 export default function ProductDetailPage(props) {
-  const [product, setProduct] = useState("");
+  const [product, setProduct] = useState('');
   const productId = props.match.params.id;
   useEffect(() => {
     fetch(
@@ -17,7 +17,7 @@ export default function ProductDetailPage(props) {
   }, [productId]);
 
   function renderProduct() {
-    if (product === "") {
+    if (product === '') {
       return <div>loading</div>;
     } else {
       return (
@@ -37,7 +37,7 @@ export default function ProductDetailPage(props) {
               <li className="detail__list-item">{`Rating: ${product.rating}`}</li>
               <li className="detail__list-item">{`Stock: ${product.stock} `}</li>
             </ol>
-            <AddToCartBtn id={productId} />
+            <AddToCartBtn id={parseInt(productId)} />
           </div>
           <div className="detail__reviews">
             <Reviews id={productId} />
