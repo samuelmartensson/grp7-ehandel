@@ -1,16 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import CartView from './CartView';
+import { CartContext } from '../context/CartContext';
 
 export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const orderName = useRef();
-
+  const couponCode = useRef();
+  const { setProductIds } = useContext(CartContext);
   function mapIdsToUrl() {
     let list;
     if (localStorage.getItem('cart')) {
       list = JSON.parse(localStorage.getItem('cart')).map((product) => {
-        return `https://mock-data-api.firebaseio.com/e-commerce/products/${product.id}.json`;
+        return {
+          url: `https://mock-data-api.firebaseio.com/e-commerce/products/${product.id}.json`,
+          quantity: product.quantity,
+        };
       });
     }
     return list;
@@ -24,10 +29,13 @@ export default function Cart() {
     } else {
       Promise.all(
         urls.map((url) =>
-          fetch(url)
+          fetch(url.url)
             .then((res) => res.json())
             .then((data) => {
-              setProducts((prevState) => [...prevState, data]);
+              setProducts((prevState) => [
+                ...prevState,
+                { item: data, quantity: url.quantity },
+              ]);
               setIsLoading(false);
             })
         )
@@ -35,9 +43,12 @@ export default function Cart() {
     }
   }
   function handleRemove(productId) {
-    //Removes item from cart and LS
+    //Removes item from state and LS
+    setProductIds((prevState) =>
+      prevState.filter((product) => product.id !== productId)
+    );
     setProducts((prevState) =>
-      prevState.filter((item) => item.id !== productId)
+      prevState.filter((product) => product.item.id !== productId)
     );
     let store = JSON.parse(localStorage.getItem('cart')).filter(
       (item) => item.id !== productId
@@ -46,26 +57,47 @@ export default function Cart() {
   }
   function displayTotal() {
     if (products.length > 0) {
-      let total = products.reduce((acc, curr) => acc + curr.price, 0);
+      let total = products.reduce(
+        (acc, curr) => acc + curr.item.price * curr.quantity,
+        0
+      );
+
+      // if (couponCode.current.value) {
+      //   console.log(couponCode.current.value);
+      //   return total * checkCoupon(couponCode.current.value);
+      // }
       return total;
     } else {
       return 0;
     }
   }
+  function checkCoupon(code) {
+    console.log(code);
+    // fetch(
+    //   `https://mock-data-api.firebaseio.com/e-commerce/couponCodes/${code}.json`
+    // )
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     if (data.valid) {
+    //       console.log('valid');
+    //       return data.discount;
+    //     } else {
+    //       return 1;
+    //     }
+    //   });
+  }
   function handlePlaceOrder() {
-    const group = 'grupp7';
-    const url = `https://mock-data-api.firebaseio.com/e-commerce/orders/${group}.json`;
+    const url = `https://mock-data-api.firebaseio.com/e-commerce/orders/group-7.json`;
     const data = {
       name: orderName.current.value,
       ordered_products: products,
       total: displayTotal(),
     };
-    console.log(data);
-    // fetch(url, { method: 'POST', body: JSON.stringify(data) })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     orderName.current.value = '';
-    //   });
+    fetch(url, { method: 'POST', body: JSON.stringify(data) })
+      .then((res) => res.json())
+      .then((data) => {
+        orderName.current.value = '';
+      });
   }
 
   useEffect(() => {
@@ -78,8 +110,10 @@ export default function Cart() {
       displayTotal={displayTotal}
       handlePlaceOrder={handlePlaceOrder}
       handleRemove={handleRemove}
-      orderName={orderName}
       products={products}
+      orderName={orderName}
+      couponCode={couponCode}
+      checkCoupon={checkCoupon}
     />
   );
 }
