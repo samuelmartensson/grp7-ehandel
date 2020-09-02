@@ -278,6 +278,8 @@
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
   padding: 10% 0;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .product__header {
@@ -296,8 +298,8 @@
   margin: 15px;
   overflow: hidden;
   border-radius: 10px;
-  -webkit-box-shadow: 0 15px 25px 25px rgba(0, 0, 0, 0.1);
-          box-shadow: 0 15px 25px 25px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0px 15px 5px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0px 15px 5px rgba(0, 0, 0, 0.1);
   -webkit-transition: 0.5s;
   transition: 0.5s;
   padding-bottom: 2rem;
