@@ -1,11 +1,10 @@
 import React from "react";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CartContext } from "../context/CartContext";
+import AddToCartBtn from "./AddToCartBtn";
 
 export default function ProductsList() {
   const [data, setData] = useState({});
-  const { handleAddToCart } = useContext(CartContext);
 
   function fetchData() {
     fetch("https://mock-data-api.firebaseio.com/e-commerce/products.json")
@@ -46,12 +45,7 @@ export default function ProductsList() {
                 </div>
               </Link>
               <div className="product__cartbutton-wrapper">
-                <button
-                  className="product__cartbutton"
-                  onClick={() => handleAddToCart(payload.id)}
-                >
-                  BUY
-                </button>
+                <AddToCartBtn id={payload.id} />
               </div>
             </div>
           );
