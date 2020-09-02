@@ -1,5 +1,6 @@
 import React from 'react';
 import Loader from './Loader';
+import { Link } from 'react-router-dom';
 
 export default function CartView({
   isLoading,
@@ -60,16 +61,22 @@ export default function CartView({
             <>
               <div className="cart__coupon">
                 <input name="coupon" ref={couponCode} type="text" />
-                <button onClick={addCoupon}>Check</button>
+                {products.length > 0 && (
+                  <button onClick={addCoupon}>Check</button>
+                )}
               </div>
             </>
           ) : (
-            <span>{couponCode.current.value} discount applied!</span>
+            <span>Success!</span>
           )}
           <div className="cart__total">Total: {total} SEK</div>
-          <button className="cart__cta" onClick={handlePlaceOrder}>
+          <Link
+            className="cart__cta"
+            onClick={handlePlaceOrder}
+            to={{ pathname: '/order', products: products, total: total }}
+          >
             Place order
-          </button>
+          </Link>
         </div>
       </div>
     </div>

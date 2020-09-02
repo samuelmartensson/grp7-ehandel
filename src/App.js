@@ -7,6 +7,7 @@ import ProductDetailPage from './components/ProductDetailPage';
 import Cart from './components/Cart';
 import { useState } from 'react';
 import LayoutHeader from './components/LayoutHeader';
+import Order from './components/Order';
 
 function App() {
   const [productIds, setProductIds] = useState([]);
@@ -57,6 +58,16 @@ function App() {
               <Cart />
             </LayoutHeader>
           </Route>
+          <Route
+            path="/order"
+            render={(props) => {
+              return (
+                <LayoutHeader>
+                  <Order {...props} />
+                </LayoutHeader>
+              );
+            }}
+          ></Route>
           <Route path="/">
             <LayoutHeader>
               <ProductsList />

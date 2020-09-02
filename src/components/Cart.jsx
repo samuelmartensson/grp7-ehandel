@@ -87,12 +87,12 @@ export default function Cart() {
       const discount = coupons[couponCode.current.value].discount;
       setTotal((prevState) => Math.floor(prevState * discount));
       setNotDiscounted(false);
+    } else {
+      alert('Coupon does not exist');
     }
   }
-  function renderCouponMessage() {
-    if (products.length === 0) {
-      return 'Cart is empty';
-    }
+  function clearCart() {
+    localStorage.setItem('cart', JSON.stringify([]));
   }
   function handlePlaceOrder() {
     const url = `https://mock-data-api.firebaseio.com/e-commerce/orders/group-7.json`;
@@ -104,7 +104,7 @@ export default function Cart() {
     fetch(url, { method: 'POST', body: JSON.stringify(data) })
       .then((res) => res.json())
       .then((data) => {
-        orderName.current.value = '';
+        clearCart();
       });
   }
 
