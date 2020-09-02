@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Loader from './Loader';
-import { CartContext } from '../context/CartContext';
-import { useContext } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import CartView from './CartView';
 
 export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
-
-  const { productIds } = useContext(CartContext);
+  const orderName = useRef();
 
   function mapIdsToUrl() {
     let list;
@@ -47,46 +44,42 @@ export default function Cart() {
     );
     localStorage.setItem('cart', JSON.stringify(store));
   }
+  function displayTotal() {
+    if (products.length > 0) {
+      let total = products.reduce((acc, curr) => acc + curr.price, 0);
+      return total;
+    } else {
+      return 0;
+    }
+  }
+  function handlePlaceOrder() {
+    const group = 'grupp7';
+    const url = `https://mock-data-api.firebaseio.com/e-commerce/orders/${group}.json`;
+    const data = {
+      name: orderName.current.value,
+      ordered_products: products,
+      total: displayTotal(),
+    };
+    console.log(data);
+    // fetch(url, { method: 'POST', body: JSON.stringify(data) })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     orderName.current.value = '';
+    //   });
+  }
 
   useEffect(() => {
     fetchAllProducts();
   }, []);
 
   return (
-    <div className="cart">
-      <h2 className="cart__subheader">Your cart</h2>
-      <div className="cart__item-container">
-        {isLoading && <Loader />}
-        {products
-          .sort((a, b) => b.price - a.price)
-          .map((product, i) => {
-            return (
-              <div className="cart__item" key={i}>
-                <div className="cart__img-wrap">
-                  <img src={product.images[0].src.small} alt="" />
-                </div>
-                <div className="cart__info-wrap">
-                  <div className="cart__name">{product.name}</div>
-                  <div className="cart__description">{product.description}</div>
-                </div>
-                <div className="cart__price">{product.price} SEK</div>
-                <div className="cart__price">
-                  {
-                    JSON.parse(localStorage.getItem('cart')).filter(
-                      (item) => item.id === product.id
-                    )[0].quantity
-                  }
-                </div>
-                <button
-                  onClick={() => handleRemove(product.id)}
-                  className="cart__remove"
-                >
-                  Remove
-                </button>
-              </div>
-            );
-          })}
-      </div>
-    </div>
+    <CartView
+      isLoading={isLoading}
+      displayTotal={displayTotal}
+      handlePlaceOrder={handlePlaceOrder}
+      handleRemove={handleRemove}
+      orderName={orderName}
+      products={products}
+    />
   );
 }
