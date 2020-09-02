@@ -14,7 +14,7 @@ function App() {
 
   function handleAddToCart(productId) {
     const isDuplicate = productIds.findIndex(
-      (product) => product.id === productId
+      (product) => product.id === parseInt(productId)
     );
     if (isDuplicate !== -1) {
       let newArr = [...productIds];
