@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Reviews from "./Reviews";
+import AddToCartBtn from "./AddToCartBtn";
 
 export default function ProductDetailPage(props) {
   const [product, setProduct] = useState("");
@@ -36,6 +37,7 @@ export default function ProductDetailPage(props) {
               <li className="detail__list-item">{`Rating: ${product.rating}`}</li>
               <li className="detail__list-item">{`Stock: ${product.stock} `}</li>
             </ol>
+            <AddToCartBtn id={productId} />
           </div>
           <div className="detail__reviews">
             <Reviews id={productId} />
