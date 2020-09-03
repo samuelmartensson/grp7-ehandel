@@ -12,6 +12,7 @@ export default function CartView({
   addCoupon,
   total,
   notDiscounted,
+  handleQuantity,
 }) {
   return (
     <div className="cart">
@@ -41,7 +42,21 @@ export default function CartView({
                   <div className="cart__description">{item.description}</div>
                 </div>
                 <div className="cart__price">{item.price} SEK</div>
-                <div className="cart__price">{product.quantity}</div>
+                <div className="cart__qty-wrap">
+                  <button
+                    onClick={() => handleQuantity(item.id, 'up')}
+                    className="cart__qty-up"
+                  >
+                    +
+                  </button>
+                  <div className="cart__price">{product.quantity}</div>
+                  <button
+                    onClick={() => handleQuantity(item.id, 'down')}
+                    className="cart__qty-down"
+                  >
+                    -
+                  </button>
+                </div>
                 <button
                   onClick={() => handleRemove(item.id)}
                   className="cart__remove"

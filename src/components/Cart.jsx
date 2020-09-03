@@ -108,6 +108,27 @@ export default function Cart() {
       });
   }
 
+  function handleQuantity(id, direction) {
+    const index = products.findIndex(
+      (product) => product.item.id === parseInt(id)
+    );
+    let newArr = [...products];
+    let value = handleIncrement(newArr[index].quantity, direction);
+    newArr[index].quantity = value;
+    setProducts(newArr);
+
+    if (value === 0) handleRemove(id);
+  }
+  function handleIncrement(value, direction, amount = 1) {
+    if (direction === 'up') {
+      return (value += amount);
+    }
+    if (direction === 'down' && value >= 1) {
+      return (value -= amount);
+    }
+    return value;
+  }
+
   useEffect(() => {
     fetchAllProducts();
     fetchCouponCodes();
@@ -129,6 +150,7 @@ export default function Cart() {
       addCoupon={addCoupon}
       total={total}
       notDiscounted={notDiscounted}
+      handleQuantity={handleQuantity}
     />
   );
 }
