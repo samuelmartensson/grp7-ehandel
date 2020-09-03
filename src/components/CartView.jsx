@@ -49,7 +49,7 @@ export default function CartView({
                   >
                     +
                   </button>
-                  <div className="cart__price">{product.quantity}</div>
+                  <div className="cart__qty">{product.quantity}</div>
                   <button
                     onClick={() => handleQuantity(item.id, 'down')}
                     className="cart__qty-down"

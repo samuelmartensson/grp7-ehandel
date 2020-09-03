@@ -110,4 +110,26 @@
       background: #58aa58;
     }
   }
+  &__qty-wrap {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    min-height: 25px;
+
+    button {
+      background: rgb(65, 196, 240);
+      color: white;
+      border: none;
+      cursor: pointer;
+      &:hover {
+        background: rgb(51, 173, 214);
+      }
+    }
+  }
+  &__qty {
+    display: grid;
+    place-items: center;
+    background: rgb(238, 238, 238);
+    color: black;
+  }
 }
