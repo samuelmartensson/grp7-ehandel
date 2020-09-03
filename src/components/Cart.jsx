@@ -10,7 +10,7 @@ export default function Cart() {
   const [notDiscounted, setNotDiscounted] = useState(true);
   const orderName = useRef();
   const couponCode = useRef();
-  const { setProductIds } = useContext(CartContext);
+  const { productIds, setProductIds } = useContext(CartContext);
 
   function mapIdsToUrl() {
     //Converts array of ids and quantity to array with fetch urls and quantity
@@ -108,16 +108,27 @@ export default function Cart() {
       });
   }
 
-  function handleQuantity(id, direction) {
+  function handleQuantity(id, direction, stock) {
     const index = products.findIndex(
       (product) => product.item.id === parseInt(id)
     );
     let newArr = [...products];
     let value = handleIncrement(newArr[index].quantity, direction);
-    newArr[index].quantity = value;
+    if (stock >= value) {
+      newArr[index].quantity = value;
+    } else {
+      alert('No more available in stock');
+    }
     setProducts(newArr);
+    handleQtyInLS(value, id);
 
     if (value === 0) handleRemove(id);
+  }
+  function handleQtyInLS(value, id) {
+    const index = productIds.findIndex((product) => product.id === id);
+    let newArr = [...productIds];
+    newArr[index].quantity = value;
+    setProductIds(newArr);
   }
   function handleIncrement(value, direction, amount = 1) {
     if (direction === 'up') {

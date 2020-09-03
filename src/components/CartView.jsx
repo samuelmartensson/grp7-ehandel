@@ -33,44 +33,42 @@ export default function CartView({
             <span className="cart__header-quantity">Quantity</span>
           </div>
         )}
-        {products
-          .sort((a, b) => b.price - a.price)
-          .map((product, i) => {
-            const item = product.item;
-            return (
-              <div className="cart__item" key={i}>
-                <div className="cart__img-wrap">
-                  <img src={item.images[0].src.small} alt="" />
-                </div>
-                <div className="cart__info-wrap">
-                  <div className="cart__name">{item.name}</div>
-                  <div className="cart__description">{item.description}</div>
-                </div>
-                <div className="cart__price">{item.price} SEK</div>
-                <div className="cart__qty-wrap">
-                  <button
-                    onClick={() => handleQuantity(item.id, 'down')}
-                    className="cart__qty-down"
-                  >
-                    -
-                  </button>
-                  <div className="cart__qty">{product.quantity}</div>
-                  <button
-                    onClick={() => handleQuantity(item.id, 'up')}
-                    className="cart__qty-up"
-                  >
-                    +
-                  </button>
-                </div>
+        {products.map((product, i) => {
+          const item = product.item;
+          return (
+            <div id={item.id} className="cart__item" key={i}>
+              <div className="cart__img-wrap">
+                <img src={item.images[0].src.small} alt="" />
+              </div>
+              <div className="cart__info-wrap">
+                <div className="cart__name">{item.name}</div>
+                <div className="cart__description">{item.description}</div>
+              </div>
+              <div className="cart__price">{item.price} SEK</div>
+              <div className="cart__qty-wrap">
                 <button
-                  onClick={() => handleRemove(item.id)}
-                  className="cart__remove"
+                  onClick={() => handleQuantity(item.id, 'down', item.stock)}
+                  className="cart__qty-down"
                 >
-                  Remove
+                  -
+                </button>
+                <div className="cart__qty">{product.quantity}</div>
+                <button
+                  onClick={() => handleQuantity(item.id, 'up', item.stock)}
+                  className="cart__qty-up"
+                >
+                  +
                 </button>
               </div>
-            );
-          })}
+              <button
+                onClick={() => handleRemove(item.id)}
+                className="cart__remove"
+              >
+                Remove
+              </button>
+            </div>
+          );
+        })}
       </div>
       <div className="cart__input-wrapper">
         <div className="cart__input-container">

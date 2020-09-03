@@ -12,15 +12,22 @@ import Order from './components/Order';
 function App() {
   const [productIds, setProductIds] = useState([]);
 
-  function handleAddToCart(productId) {
-    const isDuplicate = productIds.findIndex(
+  function handleAddToCart(productId, stock) {
+    const index = productIds.findIndex(
       (product) => product.id === parseInt(productId)
     );
-    if (isDuplicate !== -1) {
+    if (index !== -1) {
+      // Duplicate
       let newArr = [...productIds];
-      newArr[isDuplicate].quantity += 1;
-      setProductIds(newArr);
+      if (stock > newArr[index].quantity) {
+        newArr[index].quantity += 1;
+        setProductIds(newArr);
+      } else {
+        alert('No more available in stock');
+      }
     } else {
+      // New Item
+      console.log(productIds);
       setProductIds((prevState) => [
         ...prevState,
         { id: productId, quantity: 1 },
@@ -41,7 +48,9 @@ function App() {
 
   return (
     <div className="App">
-      <CartContext.Provider value={{ handleAddToCart, setProductIds }}>
+      <CartContext.Provider
+        value={{ handleAddToCart, productIds, setProductIds }}
+      >
         <Switch>
           <Route
             path="/products/:id"

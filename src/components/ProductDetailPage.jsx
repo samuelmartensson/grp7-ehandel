@@ -38,7 +38,7 @@ export default function ProductDetailPage(props) {
               <li className="detail__list-item">{`Rating: ${product.rating}`}</li>
               <li className="detail__list-item">{`Stock: ${product.stock} `}</li>
             </ol>
-            <AddToCartBtn id={parseInt(productId)} />
+            <AddToCartBtn id={parseInt(productId)} stock={product.stock} />
           </div>
           <div className="detail__reviews">
             <Reviews id={productId} />

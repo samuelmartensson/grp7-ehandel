@@ -47,7 +47,7 @@ export default function ProductsList() {
                 </div>
               </Link>
               <div className="product__cartbutton-wrapper">
-                <AddToCartBtn id={payload.id} />
+                <AddToCartBtn id={payload.id} stock={payload.stock} />
               </div>
             </div>
           );
