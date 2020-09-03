@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import Reviews from './Reviews';
 import AddToCartBtn from './AddToCartBtn';
+import Loader from './Loader';
 
 export default function ProductDetailPage(props) {
   const [product, setProduct] = useState('');
@@ -18,7 +19,7 @@ export default function ProductDetailPage(props) {
 
   function renderProduct() {
     if (product === '') {
-      return <div>loading</div>;
+      return <Loader />;
     } else {
       return (
         <div className="detail">

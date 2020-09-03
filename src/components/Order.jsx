@@ -15,6 +15,7 @@ export default function Order(props) {
                   <img
                     className="order__img"
                     src={payload.images[0].src.small}
+                    alt={payload.images[0].alt}
                   />
                 </div>
                 <div className="order__info-wrap">

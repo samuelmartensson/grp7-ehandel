@@ -20,7 +20,12 @@ export default function CartView({
       <div className="cart__item-container">
         {isLoading && <Loader />}
         {products.length === 0 && !isLoading ? (
-          <span className="cart__empty">Your cart seems to be empty 😱</span>
+          <span className="cart__empty">
+            Your cart seems to be empty{' '}
+            <span role="img" aria-label="shocked">
+              😱
+            </span>
+          </span>
         ) : (
           <div className="cart__item cart__header">
             <span className="cart__header-item">Item</span>
@@ -44,17 +49,17 @@ export default function CartView({
                 <div className="cart__price">{item.price} SEK</div>
                 <div className="cart__qty-wrap">
                   <button
-                    onClick={() => handleQuantity(item.id, 'up')}
-                    className="cart__qty-up"
-                  >
-                    +
-                  </button>
-                  <div className="cart__qty">{product.quantity}</div>
-                  <button
                     onClick={() => handleQuantity(item.id, 'down')}
                     className="cart__qty-down"
                   >
                     -
+                  </button>
+                  <div className="cart__qty">{product.quantity}</div>
+                  <button
+                    onClick={() => handleQuantity(item.id, 'up')}
+                    className="cart__qty-up"
+                  >
+                    +
                   </button>
                 </div>
                 <button

@@ -130,13 +130,13 @@ export default function Cart() {
   }
 
   useEffect(() => {
-    fetchAllProducts();
-    fetchCouponCodes();
+    fetchAllProducts(); // eslint-disable-next-line
+    fetchCouponCodes(); // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     // Must run this with products in dependency array since products are loaded asynchronously
-    setTotalPrice();
+    setTotalPrice(); // eslint-disable-next-line
   }, [products]);
 
   return (

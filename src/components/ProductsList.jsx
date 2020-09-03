@@ -1,13 +1,14 @@
-import React from "react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import AddToCartBtn from "./AddToCartBtn";
+import React from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import AddToCartBtn from './AddToCartBtn';
+import Loader from './Loader';
 
 export default function ProductsList() {
   const [data, setData] = useState({});
 
   function fetchData() {
-    fetch("https://mock-data-api.firebaseio.com/e-commerce/products.json")
+    fetch('https://mock-data-api.firebaseio.com/e-commerce/products.json')
       .then((res) => res.json())
       .then((items) => {
         setData(items);
@@ -18,6 +19,7 @@ export default function ProductsList() {
   }, []);
   return (
     <div className="product">
+      {Object.entries(data).length === 0 && <Loader />}
       {data &&
         Object.entries(data).map((item) => {
           const key = item[0];

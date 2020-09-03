@@ -114,8 +114,7 @@
     display: grid;
     grid-auto-columns: 1fr;
     grid-auto-flow: column;
-    min-height: 25px;
-
+    height: 40px;
     button {
       background: rgb(65, 196, 240);
       color: white;
