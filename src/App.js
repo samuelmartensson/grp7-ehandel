@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { CartContext } from './context/CartContext';
+import React, { useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
+import { CartContext } from "./context/CartContext";
 //components
-import ProductsList from './components/ProductsList';
-import ProductDetailPage from './components/ProductDetailPage';
-import Cart from './components/Cart';
-import { useState } from 'react';
-import LayoutHeader from './components/LayoutHeader';
-import Order from './components/Order';
+import ProductsList from "./components/ProductsList";
+import ProductDetailPage from "./components/ProductDetailPage";
+import Cart from "./components/Cart";
+import { useState } from "react";
+import LayoutHeader from "./components/LayoutHeader";
+import Order from "./components/Order";
 
 function App() {
   const [productIds, setProductIds] = useState([]);
@@ -28,20 +28,22 @@ function App() {
     }
   }
   useEffect(() => {
-    if (!localStorage.getItem('cart')) {
-      localStorage.setItem('cart', JSON.stringify([]));
+    if (!localStorage.getItem("cart")) {
+      localStorage.setItem("cart", JSON.stringify([]));
     } else {
-      setProductIds(JSON.parse(localStorage.getItem('cart')));
+      setProductIds(JSON.parse(localStorage.getItem("cart")));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify([...productIds]));
+    localStorage.setItem("cart", JSON.stringify([...productIds]));
   }, [productIds]);
 
   return (
     <div className="App">
-      <CartContext.Provider value={{ handleAddToCart, setProductIds }}>
+      <CartContext.Provider
+        value={{ handleAddToCart, setProductIds, productIds }}
+      >
         <Switch>
           <Route
             path="/products/:id"

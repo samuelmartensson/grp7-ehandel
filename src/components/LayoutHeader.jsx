@@ -1,5 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import CartCounter from "./CartCounter";
 
 export default function LayoutHeader({ children }) {
   return (
@@ -9,7 +10,7 @@ export default function LayoutHeader({ children }) {
           Start
         </Link>
         <Link className="link" to="/cart">
-          Cart
+          Cart <CartCounter />
         </Link>
       </div>
 
