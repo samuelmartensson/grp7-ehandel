@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import CartView from './CartView';
 import { CartContext } from '../context/CartContext';
+import CartKit from '../cart';
 
 export default function Cart() {
   const [isLoading, setIsLoading] = useState(true);
@@ -11,6 +12,7 @@ export default function Cart() {
   const orderName = useRef();
   const couponCode = useRef();
   const { productIds, setProductIds } = useContext(CartContext);
+  const cart = new CartKit();
 
   function mapIdsToUrl() {
     //Converts array of ids and quantity to array with fetch urls and quantity
@@ -56,12 +58,7 @@ export default function Cart() {
     );
   }
   function setTotalPrice() {
-    // When products are fetched from endpoint they are reduced to the total price
-    let totalPrice = products.reduce(
-      (acc, curr) => acc + curr.item.price * curr.quantity,
-      0
-    );
-    setTotal(totalPrice);
+    setTotal(cart.calculateTotalPrice(products));
   }
   function fetchCouponCodes() {
     fetch(`https://mock-data-api.firebaseio.com/e-commerce/couponCodes.json`)
@@ -105,7 +102,7 @@ export default function Cart() {
       (product) => product.item.id === parseInt(id)
     );
     let newArr = [...products];
-    let value = handleIncrement(newArr[index].quantity, direction);
+    let value = cart.handleIncrement(newArr[index].quantity, direction);
     if (stock >= value) {
       newArr[index].quantity = value;
     } else {
@@ -113,7 +110,6 @@ export default function Cart() {
     }
     setProducts(newArr);
     handleQtyInLS(value, id);
-
     if (value === 0) handleRemove(id);
   }
   function handleQtyInLS(value, id) {
@@ -121,15 +117,6 @@ export default function Cart() {
     let newArr = [...productIds];
     newArr[index].quantity = value;
     setProductIds(newArr);
-  }
-  function handleIncrement(value, direction, amount = 1) {
-    if (direction === 'up') {
-      return (value += amount);
-    }
-    if (direction === 'down' && value >= 1) {
-      return (value -= amount);
-    }
-    return value;
   }
 
   useEffect(() => {
