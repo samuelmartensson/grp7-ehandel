@@ -25,7 +25,6 @@ export default function Cart() {
     }
     return list;
   }
-
   function fetchAllProducts() {
     let urls = mapIdsToUrl();
     if (urls.length === 0) {
@@ -55,13 +54,7 @@ export default function Cart() {
     setProducts((prevState) =>
       prevState.filter((product) => product.item.id !== productId)
     );
-    //Removes item from local storage
-    let store = JSON.parse(localStorage.getItem('cart')).filter(
-      (item) => item.id !== productId
-    );
-    localStorage.setItem('cart', JSON.stringify(store));
   }
-
   function setTotalPrice() {
     // When products are fetched from endpoint they are reduced to the total price
     let totalPrice = products.reduce(
@@ -79,10 +72,10 @@ export default function Cart() {
   }
   function addCoupon() {
     if (
-      products.length > 0 &&
       Object.entries(coupons).find(
-        (item) => item[0] === couponCode.current.value && notDiscounted
-      )
+        (item) => item[0] === couponCode.current.value
+      ) &&
+      notDiscounted
     ) {
       const discount = coupons[couponCode.current.value].discount;
       setTotal((prevState) => Math.floor(prevState * discount));
@@ -107,7 +100,6 @@ export default function Cart() {
         clearCart();
       });
   }
-
   function handleQuantity(id, direction, stock) {
     const index = products.findIndex(
       (product) => product.item.id === parseInt(id)

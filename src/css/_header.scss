@@ -1,14 +1,60 @@
 .menu {
   font-family: 'Roboto', sans-serif;
-  display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.171);
 }
 .link {
-  color: black;
+  color: #aad7fc;
   text-decoration: none;
   padding: 20px;
-  flex: 1;
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  text-shadow: 0 0 15px #c9e7ff;
+  transition: 150ms ease;
   &:hover {
-    background: gray;
+    transform: translateX(7px);
+  }
+}
+.cart-link {
+  position: fixed;
+  right: 2%;
+  top: 0;
+  margin-top: 1rem;
+  background: #c9e7ff;
+  border-radius: 50px;
+  height: 60px;
+  width: 60px;
+  transition: 80ms ease-in-out;
+  &:hover .cart-counter {
+    transform: scale(1.1);
+  }
+  &:hover {
+    background: #aad7fc;
+  }
+}
+.cart-counter {
+  position: absolute;
+  right: 0;
+  top: -10px;
+  background: #ff6961;
+  color: white;
+  height: 30px;
+  width: 30px;
+  border-radius: 50px;
+  display: grid;
+  place-items: center;
+  transition-duration: 200ms;
+}
+.img-wrap {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  img {
+    max-height: 40px;
+    margin-right: 4px;
   }
 }

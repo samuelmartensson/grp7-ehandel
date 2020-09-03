@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import React, { useContext } from 'react';
+import { CartContext } from '../context/CartContext';
 
 export default function CartCounter() {
   const { productIds } = useContext(CartContext);
@@ -11,5 +11,9 @@ export default function CartCounter() {
     return totalQuantity;
   }
 
-  return <div>{productIds && displayQuantity()}</div>;
+  return (
+    <div className="cart-counter">
+      <span>{productIds && displayQuantity()}</span>
+    </div>
+  );
 }
