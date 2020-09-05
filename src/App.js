@@ -8,6 +8,7 @@ import Cart from './components/Cart';
 import { useState } from 'react';
 import LayoutHeader from './components/LayoutHeader';
 import Order from './components/Order';
+import CartAsync from './components/CartAsync';
 
 function App() {
   const [productIds, setProductIds] = useState([]);
@@ -27,7 +28,6 @@ function App() {
       }
     } else {
       // New Item
-      console.log(productIds);
       setProductIds((prevState) => [
         ...prevState,
         { id: productId, quantity: 1 },
@@ -58,6 +58,7 @@ function App() {
               return (
                 <LayoutHeader>
                   <ProductDetailPage {...props} />;
+                  <CartAsync />
                 </LayoutHeader>
               );
             }}
@@ -79,6 +80,7 @@ function App() {
           ></Route>
           <Route path="/">
             <LayoutHeader>
+              <CartAsync />
               <ProductsList />
             </LayoutHeader>
           </Route>

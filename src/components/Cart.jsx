@@ -18,7 +18,7 @@ export default function Cart() {
     //Converts array of ids and quantity to array with fetch urls and quantity
     let list;
     if (localStorage.getItem('cart')) {
-      list = JSON.parse(localStorage.getItem('cart')).map((product) => {
+      list = productIds.map((product) => {
         return {
           url: `https://mock-data-api.firebaseio.com/e-commerce/products/${product.id}.json`,
           quantity: product.quantity,
@@ -28,6 +28,8 @@ export default function Cart() {
     return list;
   }
   function fetchAllProducts() {
+    setProducts([]);
+    setIsLoading(true);
     let urls = mapIdsToUrl();
     if (urls.length === 0) {
       setIsLoading(false);
@@ -103,13 +105,14 @@ export default function Cart() {
     );
     let newArr = [...products];
     let value = cart.handleIncrement(newArr[index].quantity, direction);
+    console.log(value);
     if (stock >= value) {
       newArr[index].quantity = value;
+      handleQtyInLS(value, id);
     } else {
       alert('No more available in stock');
     }
     setProducts(newArr);
-    handleQtyInLS(value, id);
     if (value === 0) handleRemove(id);
   }
   function handleQtyInLS(value, id) {
@@ -120,9 +123,15 @@ export default function Cart() {
   }
 
   useEffect(() => {
-    fetchAllProducts(); // eslint-disable-next-line
     fetchCouponCodes(); // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    fetchAllProducts(); // eslint-disable-next-line
+    if (products.length === 0) {
+      setIsLoading(false);
+    }
+  }, [productIds]);
 
   useEffect(() => {
     // Must run this with products in dependency array since products are loaded asynchronously

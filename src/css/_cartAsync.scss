@@ -1,34 +1,75 @@
-.cart {
+.cart-async {
   font-family: 'Roboto', sans-serif;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 300px;
-  background: rgb(230, 230, 230);
+  background: white;
   margin-left: auto;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 999;
+  transition: 300ms ease;
+
+  &__overlay {
+    content: '';
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.37);
+    z-index: 997;
+    animation: fadeIn 200ms;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
   &__item-container {
     height: 100%;
     overflow-y: auto;
     position: relative;
     overflow-x: hidden;
   }
-  &__subheader {
+  &__subheader,
+  &__empty {
     color: #836666;
     font-weight: normal;
     padding: 1rem;
     border-bottom: 1px solid rgb(211, 211, 211);
   }
+  &__empty {
+    border: none;
+  }
+
   &__item {
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: 1fr 0.5fr;
     align-items: center;
-    border-bottom: 1px solid rgb(211, 211, 211);
-    padding-bottom: 1rem;
+    border-bottom: 1px solid rgb(231, 231, 231);
     column-gap: 0.8rem;
     font-size: 0.9rem;
-    padding: 1rem;
+    padding: 15px;
+    animation: fadeInTranslate 200ms;
+  }
+  @keyframes fadeInTranslate {
+    0% {
+      opacity: 0;
+      transform: translateX(-1rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
   &__info-wrap {
     display: flex;
@@ -37,7 +78,13 @@
     grid-row-start: 1;
   }
   &__name {
-    white-space: nowrap;
+    a {
+      color: #2ea3f2;
+      text-decoration: none;
+    }
+  }
+  &__price {
+    color: #666;
   }
   &__qty-wrap {
     grid-row-start: 2;
@@ -46,7 +93,7 @@
   &__remove {
     grid-row-start: 2;
     border: none;
-    color: #41c4f0;
+    color: #2ea3f2;
     cursor: pointer;
     background: none;
   }
@@ -70,61 +117,41 @@
     display: grid;
     place-items: center;
     row-gap: 1rem;
-    margin-top: 4rem;
-    background: rgb(226, 226, 226);
-    padding: 5rem 0;
-  }
-  &__input-container {
-    display: flex;
-    flex-direction: column;
-    min-width: 300px;
-
-    input:first-of-type,
-    span,
-    .cart__total {
-      margin-bottom: 1rem;
-    }
-    input {
-      padding: 1rem;
-      border: none;
-      background: rgb(235, 235, 235);
-    }
-    button {
-      border: none;
-      background: #64bd64;
-      color: white;
-      padding: 1rem;
-    }
-    span {
-      padding: 1rem;
-      text-align: center;
-      background: rgb(65, 196, 240);
-      color: white;
-    }
-  }
-  &__coupon {
-    display: flex;
-    align-items: flex-start;
-    input {
-      flex: 1;
-    }
+    margin: 0.8rem;
   }
   &__total {
     font-weight: bold;
-    text-align: center;
+    color: #666;
   }
-  &__cta {
-    padding: 1rem 3rem;
-    border: none;
-    background: #64bd64;
-    color: white;
+  &__checkout {
+    border: 2px solid #2ea3f2;
+    width: 100%;
     text-align: center;
-    cursor: pointer;
+    background: white;
     text-decoration: none;
+    color: #2ea3f2;
+    font-size: 1.25rem;
+    padding: 1rem;
+    transition-duration: 80ms;
+    border-radius: 4px;
+
+    i {
+      opacity: 0;
+    }
+    span {
+      transition-duration: 80ms;
+    }
     &:hover {
-      background: #58aa58;
+      border-color: rgba(0, 0, 0, 0);
+    }
+    &:hover span {
+      padding-right: 0.75rem;
+    }
+    &:hover i {
+      opacity: 1;
     }
   }
+
   &__qty-wrap {
     display: grid;
     grid-auto-columns: 1fr;
