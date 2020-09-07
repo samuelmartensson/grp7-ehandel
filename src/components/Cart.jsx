@@ -31,23 +31,22 @@ export default function Cart() {
     setProducts([]);
     setIsLoading(true);
     let urls = mapIdsToUrl();
+    // Fetches all products from database by using product id in correct endpoint (see mapIdsToUrl function)
+    Promise.all(
+      urls.map((url) =>
+        fetch(url.url)
+          .then((res) => res.json())
+          .then((data) => {
+            setProducts((prevState) => [
+              ...prevState,
+              { item: data, quantity: url.quantity },
+            ]);
+            setIsLoading(false);
+          })
+      )
+    );
     if (urls.length === 0) {
       setIsLoading(false);
-    } else {
-      // Fetches all products from database by using product id in correct endpoint (see mapIdsToUrl function)
-      Promise.all(
-        urls.map((url) =>
-          fetch(url.url)
-            .then((res) => res.json())
-            .then((data) => {
-              setProducts((prevState) => [
-                ...prevState,
-                { item: data, quantity: url.quantity },
-              ]);
-              setIsLoading(false);
-            })
-        )
-      );
     }
   }
   function handleRemove(productId) {
@@ -128,9 +127,6 @@ export default function Cart() {
 
   useEffect(() => {
     fetchAllProducts(); // eslint-disable-next-line
-    if (products.length === 0) {
-      setIsLoading(false);
-    }
   }, [productIds]);
 
   useEffect(() => {
