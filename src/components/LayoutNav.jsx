@@ -2,18 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import CartCounter from "./CartCounter";
 
-export default function LayoutHeader({ children }) {
+export default function LayoutNav({ children }) {
   return (
     <div>
       <div className="menu">
-        <div className="cloud">
-          <Link className="link" to="/">
-            7th Heaven
-          </Link>
-          <div className="cloud-sm">
-            <div className="cloud-lg"></div>
-          </div>
-        </div>
+        <Link className="link-home" to="/">
+          7th Heaven
+        </Link>
 
         <Link className="cart-link" to="/cart">
           <div className="img-wrap">
