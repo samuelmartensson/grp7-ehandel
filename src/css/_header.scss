@@ -1,44 +1,72 @@
+.startpage {
+  background: linear-gradient(
+    180deg,
+    rgb(131, 166, 216) 1%,
+    rgba(207, 217, 231, 1) 10%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+
 .menu {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
+  padding-top: 40px;
 }
 .link {
+  position: absolute;
+  font-family: "Lobster", cursive;
+  font-size: 48px;
+  width: 100%;
   color: #aad7fc;
+  margin-left: 38px;
+  top: 15px;
+  left: 10px;
+  text-shadow: 0 0 10px #ffffff;
   text-decoration: none;
-  padding: 20px;
-  display: block;
-  position: fixed;
-  top: 0;
-  left: 0;
-  font-size: 2rem;
-  font-weight: bold;
-  text-shadow: 0 0 15px #c9e7ff;
-  transition: 150ms ease;
+  transition: ease 0.3s;
+  z-index: 10;
+
   &:hover {
-    transform: translateX(7px);
+    transform: scale(1.05);
+  }
+
+  &-home {
+    font-family: "Lobster", cursive;
+    font-size: 48px;
+    margin-left: 38px;
+    padding-top: 100px;
+    text-decoration: none;
+    color: #aad7fc;
+    transition: ease 0.3s;
+
+    &:hover {
+      color: #6cbafa;
+    }
   }
 }
 .cart-link {
   position: fixed;
-  right: 2%;
-  top: 0;
+  right: 1%;
+  top: 20px;
   margin-top: 1rem;
-  background: #c9e7ff;
+  background: #ffffff;
   border-radius: 50px;
   height: 60px;
   width: 60px;
   transition: 80ms ease-in-out;
+  box-shadow: 0 0 10px #ffffff, inset -10px -10px 30px #ccc;
   &:hover .cart-counter {
     transform: scale(1.1);
   }
   &:hover {
-    background: #aad7fc;
+    background: #c9e7ff;
+    box-shadow: 0 0 10px #ffffff;
   }
 }
 .cart-counter {
   position: absolute;
   right: 0;
   top: -10px;
-  background: #ff6961;
+  background: #000000;
   color: white;
   height: 30px;
   width: 30px;
@@ -56,5 +84,41 @@
   img {
     max-height: 40px;
     margin-right: 4px;
+  }
+}
+
+//cloud
+
+.cloud {
+  width: 290px;
+  height: 100px;
+  background-color: #ffffff;
+  top: 100px;
+  left: 20px;
+  border-radius: 100px;
+  box-shadow: 0 0 10px #ffffff, inset -10px -10px 30px #ccc;
+  position: fixed;
+  z-index: 5;
+
+  &-sm {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    top: -35px;
+    left: 55px;
+    box-shadow: 0 0 10px #ffffff;
+    position: absolute;
+  }
+
+  &-lg {
+    width: 143px;
+    height: 143px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    top: -42px;
+    left: 58px;
+    box-shadow: 0 0 15px #ffffff;
+    position: absolute;
   }
 }

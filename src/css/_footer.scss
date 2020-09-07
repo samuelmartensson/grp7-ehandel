@@ -1,0 +1,35 @@
+.footer {
+  min-height: 300px;
+  background-color: rgb(6, 62, 106);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+  }
+
+  &__title {
+    font-family: "Lobster", cursive;
+    font-size: 22px;
+  }
+
+  &__text {
+    font-family: "Roboto", sans-serif;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  &__social-icon {
+    padding: 10px;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+  }
+}
