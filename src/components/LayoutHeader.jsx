@@ -1,6 +1,6 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import CartCounter from "./CartCounter";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import CartCounter from './CartCounter';
 
 export default function LayoutHeader({ children }) {
   return (
@@ -17,7 +17,7 @@ export default function LayoutHeader({ children }) {
 
         <Link className="cart-link" to="/cart">
           <div className="img-wrap">
-            <img src={require("../images/cart-icon.png")} />
+            <img src={require('../images/cart-icon.png')} />
             <CartCounter />
           </div>
         </Link>

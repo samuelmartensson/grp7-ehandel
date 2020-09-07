@@ -1,13 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
-@import "reviews";
-@import "cart";
-@import "header";
-@import "loader";
-@import "productview";
-@import "order";
-@import "detailview";
-@import "footer";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import 'reviews';
+@import 'cart';
+@import 'header';
+@import 'loader';
+@import 'productview';
+@import 'order';
+@import 'detailview';
+@import 'footer';
+@import 'cartAsync';
 
 * {
   padding: 0;

@@ -8,12 +8,12 @@
 }
 
 .menu {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   padding-top: 40px;
 }
 .link {
   position: absolute;
-  font-family: "Lobster", cursive;
+  font-family: 'Lobster', cursive;
   font-size: 48px;
   width: 100%;
   color: #aad7fc;
@@ -30,7 +30,7 @@
   }
 
   &-home {
-    font-family: "Lobster", cursive;
+    font-family: 'Lobster', cursive;
     font-size: 48px;
     margin-left: 38px;
     padding-top: 100px;
@@ -52,6 +52,8 @@
   border-radius: 50px;
   height: 60px;
   width: 60px;
+  border: none;
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.349);
   transition: 80ms ease-in-out;
   box-shadow: 0 0 10px #ffffff, inset -10px -10px 30px #ccc;
   &:hover .cart-counter {

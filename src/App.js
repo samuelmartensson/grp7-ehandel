@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
-import { CartContext } from "./context/CartContext";
+import React, { useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import { CartContext } from './context/CartContext';
 //components
-import ProductsList from "./components/ProductsList";
-import ProductDetailPage from "./components/ProductDetailPage";
-import Cart from "./components/Cart";
-import { useState } from "react";
-import LayoutHeader from "./components/LayoutHeader";
-import Order from "./components/Order";
-import LayoutNav from "./components/LayoutNav";
-import Footer from "./components/Footer";
+import ProductsList from './components/ProductsList';
+import ProductDetailPage from './components/ProductDetailPage';
+import Cart from './components/Cart';
+import { useState } from 'react';
+import LayoutHeader from './components/LayoutHeader';
+import Order from './components/Order';
+import CartAsync from './components/CartAsync';
+import LayoutNav from './components/LayoutNav';
+import Footer from './components/Footer';
 
 function App() {
   const [productIds, setProductIds] = useState([]);
@@ -25,11 +26,10 @@ function App() {
         newArr[index].quantity += 1;
         setProductIds(newArr);
       } else {
-        alert("No more available in stock");
+        alert('No more available in stock');
       }
     } else {
       // New Item
-      console.log(productIds);
       setProductIds((prevState) => [
         ...prevState,
         { id: productId, quantity: 1 },
@@ -37,15 +37,15 @@ function App() {
     }
   }
   useEffect(() => {
-    if (!localStorage.getItem("cart")) {
-      localStorage.setItem("cart", JSON.stringify([]));
+    if (!localStorage.getItem('cart')) {
+      localStorage.setItem('cart', JSON.stringify([]));
     } else {
-      setProductIds(JSON.parse(localStorage.getItem("cart")));
+      setProductIds(JSON.parse(localStorage.getItem('cart')));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify([...productIds]));
+    localStorage.setItem('cart', JSON.stringify([...productIds]));
   }, [productIds]);
 
   return (
@@ -60,6 +60,7 @@ function App() {
               return (
                 <LayoutNav>
                   <ProductDetailPage {...props} />;
+                  <CartAsync />
                 </LayoutNav>
               );
             }}
@@ -82,6 +83,7 @@ function App() {
           <Route path="/">
             <section className="startpage">
               <LayoutHeader>
+                <CartAsync />
                 <ProductsList />
               </LayoutHeader>
             </section>

@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import CartView from './CartView';
+import CartAsyncView from './CartAsyncView';
 import { CartContext } from '../context/CartContext';
 import CartKit from '../cart';
 
-export default function Cart() {
+export default function CartAsync() {
   const [isLoading, setIsLoading] = useState(true);
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
-  const [coupons, setCoupons] = useState([]);
-  const [notDiscounted, setNotDiscounted] = useState(true);
-  const orderName = useRef();
-  const couponCode = useRef();
+  const [isOpen, setIsOpen] = useState(false);
   const { productIds, setProductIds } = useContext(CartContext);
   const cart = new CartKit();
 
@@ -27,28 +24,32 @@ export default function Cart() {
     }
     return list;
   }
+
   function fetchAllProducts() {
     setProducts([]);
     setIsLoading(true);
     let urls = mapIdsToUrl();
-    // Fetches all products from database by using product id in correct endpoint (see mapIdsToUrl function)
-    Promise.all(
-      urls.map((url) =>
-        fetch(url.url)
-          .then((res) => res.json())
-          .then((data) => {
-            setProducts((prevState) => [
-              ...prevState,
-              { item: data, quantity: url.quantity },
-            ]);
-            setIsLoading(false);
-          })
-      )
-    );
     if (urls.length === 0) {
       setIsLoading(false);
+    } else {
+      // Fetches all products from database by using product id in correct endpoint (see mapIdsToUrl function)
+      Promise.all(
+        urls.map((url) =>
+          fetch(url.url)
+            .then((res) => res.json())
+            .then((data) => {
+              setProducts((prevState) =>
+                [...prevState, { item: data, quantity: url.quantity }].sort(
+                  (a, b) => a - b
+                )
+              );
+              setIsLoading(false);
+            })
+        )
+      );
     }
   }
+
   function handleRemove(productId) {
     //Removes item from state by filtering current depending array
     setProductIds((prevState) =>
@@ -61,50 +62,13 @@ export default function Cart() {
   function setTotalPrice() {
     setTotal(cart.calculateTotalPrice(products));
   }
-  function fetchCouponCodes() {
-    fetch(`https://mock-data-api.firebaseio.com/e-commerce/couponCodes.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCoupons(data);
-      });
-  }
-  function addCoupon() {
-    if (
-      Object.entries(coupons).find(
-        (item) => item[0] === couponCode.current.value
-      ) &&
-      notDiscounted
-    ) {
-      const discount = coupons[couponCode.current.value].discount;
-      setTotal((prevState) => Math.floor(prevState * discount));
-      setNotDiscounted(false);
-    } else {
-      alert('Coupon does not exist');
-    }
-  }
-  function clearCart() {
-    localStorage.setItem('cart', JSON.stringify([]));
-  }
-  function handlePlaceOrder() {
-    const url = `https://mock-data-api.firebaseio.com/e-commerce/orders/group-7.json`;
-    const data = {
-      name: orderName.current.value,
-      ordered_products: products,
-      total: total,
-    };
-    fetch(url, { method: 'POST', body: JSON.stringify(data) })
-      .then((res) => res.json())
-      .then((data) => {
-        clearCart();
-      });
-  }
+
   function handleQuantity(id, direction, stock) {
     const index = products.findIndex(
       (product) => product.item.id === parseInt(id)
     );
     let newArr = [...products];
     let value = cart.handleIncrement(newArr[index].quantity, direction);
-    console.log(value);
     if (stock >= value) {
       newArr[index].quantity = value;
       handleQtyInLS(value, id);
@@ -120,31 +84,37 @@ export default function Cart() {
     newArr[index].quantity = value;
     setProductIds(newArr);
   }
-
-  useEffect(() => {
-    fetchCouponCodes(); // eslint-disable-next-line
-  }, []);
+  function handleOpenState() {
+    setIsOpen((prevState) => !prevState);
+    if (!isOpen) {
+      document.querySelector('body').style = 'overflow: hidden';
+    }
+  }
 
   useEffect(() => {
     fetchAllProducts(); // eslint-disable-next-line
   }, [productIds]);
 
   useEffect(() => {
+    if (isOpen) {
+      fetchAllProducts();
+    } else {
+      document.querySelector('body').style = 'overflow: visible';
+    }
+  }, [isOpen]);
+  useEffect(() => {
     // Must run this with products in dependency array since products are loaded asynchronously
     setTotalPrice(); // eslint-disable-next-line
   }, [products]);
 
   return (
-    <CartView
+    <CartAsyncView
+      isOpen={isOpen}
+      toggleCart={handleOpenState}
       isLoading={isLoading}
-      handlePlaceOrder={handlePlaceOrder}
       handleRemove={handleRemove}
       products={products}
-      orderName={orderName}
-      couponCode={couponCode}
-      addCoupon={addCoupon}
       total={total}
-      notDiscounted={notDiscounted}
       handleQuantity={handleQuantity}
     />
   );
