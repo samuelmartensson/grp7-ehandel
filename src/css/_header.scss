@@ -44,18 +44,19 @@
   }
 }
 .cart-link {
-  position: fixed;
-  right: 1%;
-  top: 20px;
+  position: absolute;
+  left: -80px;
+  bottom: 20px;
   margin-top: 1rem;
   background: #ffffff;
-  border-radius: 50px;
+  border-radius: 10px;
   height: 60px;
   width: 60px;
   border: none;
   box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.349);
   transition: 80ms ease-in-out;
-  box-shadow: 0 0 10px #ffffff, inset -10px -10px 30px #ccc;
+  box-shadow: 0 0 10px #ffffffad, inset -10px -10px 30px #ccc;
+  cursor: pointer;
   &:hover .cart-counter {
     transform: scale(1.1);
   }

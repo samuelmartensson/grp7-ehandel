@@ -58,17 +58,17 @@ function App() {
             path="/products/:id"
             render={(props) => {
               return (
-                <LayoutNav>
+                <LayoutHeader>
                   <ProductDetailPage {...props} />;
                   <CartAsync />
-                </LayoutNav>
+                </LayoutHeader>
               );
             }}
           ></Route>
           <Route path="/cart">
-            <LayoutNav>
+            <LayoutHeader>
               <Cart />
-            </LayoutNav>
+            </LayoutHeader>
           </Route>
           <Route
             path="/order"

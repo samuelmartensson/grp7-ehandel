@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import Reviews from "./Reviews";
-import AddToCartBtn from "./AddToCartBtn";
-import Loader from "./Loader";
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import Reviews from './Reviews';
+import AddToCartBtn from './AddToCartBtn';
+import Loader from './Loader';
 
 export default function ProductDetailPage(props) {
-  const [product, setProduct] = useState("");
+  const [product, setProduct] = useState('');
   const productId = props.match.params.id;
   useEffect(() => {
     fetch(
@@ -18,7 +18,7 @@ export default function ProductDetailPage(props) {
   }, [productId]);
 
   function renderProduct() {
-    if (product === "") {
+    if (product === '') {
       return <Loader />;
     } else {
       return (

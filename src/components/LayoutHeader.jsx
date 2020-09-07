@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import CartCounter from './CartCounter';
+import CartBtn from './CartBtn';
 
 export default function LayoutHeader({ children }) {
   return (
@@ -14,13 +15,6 @@ export default function LayoutHeader({ children }) {
             <div className="cloud-lg"></div>
           </div>
         </div>
-
-        <Link className="cart-link" to="/cart">
-          <div className="img-wrap">
-            <img src={require('../images/cart-icon.png')} />
-            <CartCounter />
-          </div>
-        </Link>
       </div>
 
       {children}
